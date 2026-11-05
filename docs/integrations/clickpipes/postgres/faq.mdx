@@ -325,9 +325,9 @@ For more specific issue, refer to the possibilities below.
 Postgres `NUMERIC` columns declared without a precision and scale can hold up to 131072 digits before the decimal point and 16383 digits after it. ClickHouse `Decimal` holds at most 76 digits in total, and ClickPipes maps these unbounded `NUMERIC` columns to `Decimal(76, 38)`. When a value does not fit, the ClickPipe keeps running and adjusts the value:
 
 - More than 38 digits after the decimal point: the extra digits are dropped.
-- More than 38 digits before the decimal point: the value cannot be represented and is written as `0`.
+- More than 38 digits before the decimal point: the value cannot be represented and is written as `0`. During the initial load, if the destination column is `Nullable`, it is written as `NULL` instead.
 
-Both cases are recorded in the ClickPipe's **Logs** tab and sent as a notification, at most once per day per ClickPipe while they keep happening. Columns declared with a precision above 76 digits are mapped to `String` automatically and are not affected.
+Both cases are recorded in the ClickPipe's **Logs** tab and sent as a notification, at most once per day for each case while they keep happening. Columns declared with a precision above 76 digits are mapped to `String` automatically and are not affected.
 
 If you need the full precision for unbounded `NUMERIC` columns, ClickPipes can map them to `String` instead. Open a support case to have this enabled for your ClickPipe.
 
